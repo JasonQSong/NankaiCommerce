@@ -1,0 +1,81 @@
+<extend name="Public:base" />
+<block name="title">
+	<title>Register</title>
+</block>
+
+<block name="headfiles">
+	<link rel="stylesheet" type="text/css" href="style/css/style2.css" media="all" />
+</block>
+
+<block name="javascript">		
+	<script type="text/javascript" >
+	function autofill(){
+		$('#UserName').val('UserName');
+		$('#Passwd').val('Passwd');
+		$('#PasswdConfirm').val('Passwd');
+		$('#DisplayName').val('昵称');
+		$('#FullName').val('真实姓名');
+		$('#GenderMale');
+		$('#Age').val('20');
+		$('#Telephone').val('18817518909');
+		$('#Email').val('Email@example.com');
+		$('#Address').val('上海交通大学');
+	};
+	</script>
+</block>
+
+<block name="main">
+<div style="width:700px; margin:0 auto;"  >
+	<form action="{:U('User/registerpost')}" method="post">
+		<table border="1" cellspacing="2" cellpadding="2">
+			<tr>
+				<td><label for="UserName">用户名</label></td>
+				<td><input id="UserName" name="UserName" type="text" maxlength="20"></td>
+			</tr>
+			<tr>
+				<td><label for="Passwd">密码</label></td>
+				<td><input id="Passwd" name="Passwd" type="password"></td>
+			</tr>
+			<tr>
+				<td><label for="PasswdConfirm">确认密码</label></td>
+				<td><input id="PasswdConfirm" name="PasswdConfirm" type="password"></td>
+			</tr>
+			<tr>
+				<td><label for="DisplayName">昵称</label></td>
+				<td><input id="DisplayName" name="DisplayName" type="text" maxlength="20"></td>
+			</tr>
+			<tr>
+				<td><label for="FullName">真实姓名</label></td>
+				<td><input id="FullName" name="FullName" type="text" maxlength="20"></td>
+			</tr>
+			<tr>
+				<td><label for="Gender">性别</label></td>
+				<td>
+					<input id="GenderMale" name="Gender" type="radio" value="0" checked="checked" /><label for="GenderMale">男</label>
+					<input id="GenderFemale" name="Gender" type="radio" value="1" /><label for="GenderFemale">女</label>
+				</td>
+			</tr>
+			<tr>
+				<td><label for="Age">年龄</label></td>
+				<td><input id="Age" name="Age" type="text" maxlength="20"></td>
+			</tr>
+			<tr>
+				<td><label for="Email">Email</label></td>
+				<td><input id="Email" name="Email" type="text" maxlength="20"></td>
+			</tr>
+			<tr>
+				<td><label for="Telephone">电话</label></td>
+				<td><input id="Telephone" name="Telephone" type="text" maxlength="20"></td>
+			</tr>
+			<tr>
+				<td><label for="Address">地址</label></td>
+				<td><input id="Address" name="Address" type="text" maxlength="20"></td>
+			</tr>
+			<tr>
+				<td><a href="{:U('User/login')}">登录</a></td>
+				<td><input id="submit" name="submit" type="submit" value="确认"><a href="#" onclick="autofill()">自动填充（仅限测试）</a></td>
+			</tr>
+		</table>
+	</form>
+</div>
+</block>

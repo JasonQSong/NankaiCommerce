@@ -1,0 +1,56 @@
+<extend name="Public:base" />
+<block name="title">
+	<title>Login</title>
+</block>
+
+<block name="headfiles">
+	<link rel="stylesheet" type="text/css" href="style/css/style2.css" media="all" />
+</block>
+
+<block name="javascript">				
+	<script type="text/javascript" >
+	function autofill(){
+		$('#ItemName').val('物品名称');
+		$('#Description').val('物品描述');
+	};
+	</script>
+</block>
+
+<block name="main">
+<div style="width:700px; margin:0 auto;"  >
+	<form action="{:U('Sell/additempost')}" method="post">
+		<table border="1" cellspacing="2" cellpadding="2">
+			<tr>
+				<td><label for="ItemName">物品名称</label></td>
+				<td><input id="ItemName" name="ItemName" type="text" maxlength="20"></td>
+			</tr>
+			<tr>
+				<td><label for="Description">物品描述</label></td>
+				<td><input id="Description" name="ItemDescription" type="text" maxlength="20"></td>
+			</tr>
+			<tr>
+				<td><label for="CatagoryID">物品分类</label></td>
+				<td>
+					<select id="CatagoryID" name="CatagoryID">
+						<volist name="ExistCatagories" id="vo">
+							<option value="{$vo.ID}">{$vo.DisplayName}</option>
+						</volist>
+					</select>
+				</td>
+			</tr>
+			<tr>
+				<td><label for="ImageFile">物品图片</label></td>
+				<td><input id="ImageFile" name="ImageFile" type="file" /></td>
+			</tr>
+			<tr>
+				<td><label for="BackgroundColor">背景颜色</label></td>
+				<td><input id="BackgroundColor" name="BackgroundColor" type="color"></td>
+			</tr>
+			<tr>
+				<td><a href="{:U('User/register')}">注册</a></td>
+				<td><input id="submit" name="submit" type="submit" value="确认"><a href="#" onclick="autofill()">自动填充（仅限测试）</a></td>
+			</tr>
+		</table>
+	</form>
+</div>
+</block>

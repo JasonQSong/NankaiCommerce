@@ -1,0 +1,39 @@
+<extend name="Public:base" />
+<block name="title">
+	<title>Login</title>
+</block>
+
+<block name="headfiles">
+	<link rel="stylesheet" type="text/css" href="style/css/style2.css" media="all" />
+</block>
+
+<block name="javascript">
+		<script type="text/javascript" >
+		function autofill(){
+			$('#UserName').val('UserName');
+			$('#Passwd').val('Passwd');
+		};
+		</script>
+</block>
+
+<block name="main">
+<div style="width:700px; margin:0 auto;"  >
+	<form action="{:U('User/loginpost')}" method="post">
+		<table border="1" cellspacing="2" cellpadding="2">
+			<tr>
+				<td>用户名</td>
+				<td><input id="UserName" name="UserName" type="text" maxlength="20"></td>
+			</tr>
+			<tr>
+				<td><label for="Passwd">密码</label></td>
+				<td><input id="Passwd" name="Passwd" type="password" width="100%" ></td>
+			</tr>
+			<tr>
+				<td><a href="{:U('User/register')}">注册</a></td>
+				<td><input id="submit" name="submit" type="submit" value="确认"><a href="#" onclick="autofill()">自动填充（仅限测试）</a></td>
+			</tr>
+		</table>
+		
+	</form>
+</div>
+</block>

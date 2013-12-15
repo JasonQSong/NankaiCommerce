@@ -1,0 +1,48 @@
+<extend name="Public:base" />
+<block name="title">
+	<title>Login</title>
+</block>
+
+<block name="headfiles">
+	<link rel="stylesheet" type="text/css" href="../Admin/style/css/style2.css" media="all" />
+</block>
+<block name="javascript">
+	<script type="text/javascript" >
+	function autofill(){
+		$('#CatagoryName').val('CatagoryName');
+		$('#DisplayName').val('类别名');
+	};
+	</script>
+</block>
+
+<block name="main">
+<div style="width:700px; margin:0 auto;"  >
+	<form action="{:U('Sell/addcatagorypost')}" method="post">
+		<table border="1" cellspacing="2" cellpadding="2">
+			<tr>
+				<td><label for="CatagoryName">类别名（字段）</label></td>
+				<td><input id="CatagoryName" name="CatagoryName" type="text" maxlength="20"></td>
+			</tr>
+			<tr>
+				<td><label for="DisplayName">类别名（显示）</label></td>
+				<td><input id="DisplayName" name="DisplayName" type="text" maxlength="20"></td>
+			</tr>
+			<tr>
+				<td><label for="BelongTo">父分类</label></td>
+				<td>
+					<select id="BelongTo" name="BelongTo">
+						<option value="0">None</option>
+						<volist name="ExistCatagories" id="vo">
+							<option value="{$vo.ID}">{$vo.DisplayName}</option>
+						</volist>
+					</select>
+				</td>
+			</tr>
+			<tr>
+				<td><a href="{:U('User/register')}"></a></td>
+				<td><input id="submit" name="submit" type="submit" value="确认"><a href="#" onclick="autofill()">自动填充（仅限测试）</a></td>
+			</tr>
+		</table>
+	</form>
+</div>
+</block>
