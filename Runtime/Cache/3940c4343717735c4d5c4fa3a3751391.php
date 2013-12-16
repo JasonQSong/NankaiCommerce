@@ -31,7 +31,41 @@
 	
 	<link rel="stylesheet" type="text/css" href="style/css/style2.css" media="all" />
 
-	
+			
+	<?php if($IsAdmin): ?><script type="text/javascript" >
+		function autofill(){
+			$('#ItemName').val('物品名称');
+			$('#Description').val('物品描述');
+		};
+		</script>
+		<script type="text/javascript" >
+		var fileForm = new Object();
+		function HiddenUploadImage(fileObj) {
+			if(fileObj.value != "") {
+				var form = document.forms['AddItemForm'];
+				//把form的原始数据缓存起来
+				fileForm.f = form;
+				fileForm.a = form.getAttribute("action");  //form.action 为一个静态的对象，所以这里要使用getAttribute方法取值
+				fileForm.t = form.target;
+				//请求服务器端
+				form.target = "HiddenUploadImageFrame";
+				form.action = "<?php echo U('Sell/hiddenuploadimage');?>";
+				form.submit();// 其实上面的action已经会执行submit操作，这步可有可无
+			}
+			return false;
+		}
+		function HiddenUploadImage_callback(ImagePath){
+			//还原form属性
+			alert("callback");
+			alert(ImagePath);
+			fileForm.f.target = fileForm.t;
+			fileForm.f.setAttribute("action", fileForm.a);
+			//处理结果
+			$('ImagePath').val(ImagePath);
+			return ;
+		}
+		</script><?php endif; ?>
+
 </head>
 
 <body>
@@ -51,40 +85,31 @@
 				<!-- Begin Menu -->
 				<div id="menu" class="menu-v">
 					<ul>
-						<li><a href="index.html" class="active">Home</a>
-							<ul>
-								<li><a href="index.html">Home w/ Carousel</a></li>
-								<li><a href="index2.html">Home w/ Portfolio</a></li>
-								<li><a href="index3.html">Home w/ Testimonials</a></li>
-							</ul>
-						</li>
-						<li><a href="portfolio.html">Portfolio</a>
-							<ul>
-								<li><a href="portfolio.html">Portfolio 4 Columns</a></li>
-								<li><a href="portfolio2.html">Portfolio 3 Columns</a></li>
-								<li><a href="portfolio3.html">Portfolio 2 Columns</a></li>
-								<li><a href="portfolio4.html">Portfolio 1 Column</a></li>
-								<li><a href="portfolio-post.html">Portfolio Post</a></li>
-							</ul>
-						</li>
-						<li><a href="blog.html">Blog</a>
-							<ul>
-								<li><a href="blog.html">Blog</a></li>
-								<li><a href="blog2.html">Blog w/ Sidebar</a></li>
-								<li><a href="post.html">Post</a></li>
-								<li><a href="post2.html">Post w/ Sidebar</a></li>
-							</ul>
-						</li>
-						<li><a href="buttons-boxes-images.html">Features</a>
-							<ul>
-								<li><a href="buttons-boxes-images.html">Buttons Boxes Images</a></li>
-								<li><a href="tabs-toggle-table.html">Tabs Toggle Tables</a></li>
-								<li><a href="testimonials.html">Testimonials</a></li>
-								<li><a href="typography.html">Typography</a></li>
-								<li><a href="service-icons.html">Service Icons</a></li>
-							</ul>
-						</li>
-						<li><a href="contact.html">Contact Us</a></li>
+						<?php if(is_array($HierarchyCatagories)): $i = 0; $__LIST__ = $HierarchyCatagories;if( count($__LIST__)==0 ) : echo "" ;else: foreach($__LIST__ as $key=>$vo0): $mod = ($i % 2 );++$i;?><li>
+								<a href="<?php echo U('Buy/viewcatagory','catagoryid='.$vo0['ID']);?>"><?php echo ($vo0["DisplayName"]); ?></a>
+								<?php if($vo0['Children']): ?><ul>
+										<?php if(is_array($vo0['Children'])): $i = 0; $__LIST__ = $vo0['Children'];if( count($__LIST__)==0 ) : echo "" ;else: foreach($__LIST__ as $key=>$vo1): $mod = ($i % 2 );++$i;?><li>
+												<a href="<?php echo U('Buy/viewcatagory','catagoryid='.$vo1['ID']);?>"><?php echo ($vo1["DisplayName"]); ?></a>
+											</li><?php endforeach; endif; else: echo "" ;endif; ?>
+									</ul><?php endif; ?>
+							</li><?php endforeach; endif; else: echo "" ;endif; ?>
+					</ul>
+				</div>
+				<!-- End Menu -->
+				<!-- Begin Menu -->
+				<div id="menu" class="menu-v">
+					<ul>
+						<?php if(is_array($AncestorsCatagories)): $i = 0; $__LIST__ = $AncestorsCatagories;if( count($__LIST__)==0 ) : echo "" ;else: foreach($__LIST__ as $key=>$vo0): $mod = ($i % 2 );++$i;?><li>
+								<a href="<?php echo U('Buy/viewcatagory','catagoryid='.$vo0['ID']);?>"><?php echo ($vo0["DisplayName"]); ?></a>
+							</li><?php endforeach; endif; else: echo "" ;endif; ?>
+						<?php if(is_array($SubHierarchyCatagories)): $i = 0; $__LIST__ = $SubHierarchyCatagories;if( count($__LIST__)==0 ) : echo "" ;else: foreach($__LIST__ as $key=>$vo0): $mod = ($i % 2 );++$i;?><li>
+								<a href="<?php echo U('Buy/viewcatagory','catagoryid='.$vo0['ID']);?>">|-<?php echo ($vo0["DisplayName"]); ?></a>
+								<?php if($vo0['Children']): ?><ul>
+										<?php if(is_array($vo0['Children'])): $i = 0; $__LIST__ = $vo0['Children'];if( count($__LIST__)==0 ) : echo "" ;else: foreach($__LIST__ as $key=>$vo1): $mod = ($i % 2 );++$i;?><li>
+												<a href="<?php echo U('Buy/viewcatagory','catagoryid='.$vo1['ID']);?>"><?php echo ($vo1["DisplayName"]); ?></a>
+											</li><?php endforeach; endif; else: echo "" ;endif; ?>
+									</ul><?php endif; ?>
+							</li><?php endforeach; endif; else: echo "" ;endif; ?>
 					</ul>
 				</div>
 				<!-- End Menu -->
@@ -98,6 +123,7 @@
 					<li><a href="#"><img src="style/images/icon-dribbble.png" alt="Dribbble" /></a></li>
 					<li><a href="#"><img src="style/images/icon-linkedin.png" alt="LinkedIn" /></a></li>
 				</ul>
+				<img src="Images/university.png"/>
 			</div>
 		</div>
 		<!-- End Sidebar --> 
@@ -122,7 +148,7 @@
 			
 			
 <div style="width:700px; margin:0 auto;"  >
-	<form action="<?php echo U('Sell/additempost');?>" method="post">
+	<form name="AddItemForm" action="<?php echo U('Sell/additempost');?>" method="post" enctype="multipart/form-data">
 		<table border="1" cellspacing="2" cellpadding="2">
 			<tr>
 				<td><label for="ItemName">物品名称</label></td>
@@ -133,12 +159,23 @@
 				<td><input id="Description" name="ItemDescription" type="text" maxlength="20"></td>
 			</tr>
 			<tr>
-				<td><label for="Catagory">物品分类</label></td>
-				<td><select id="Catagory" name="Catagory"></select></td>
+				<td><label for="CatagoryID">物品分类</label></td>
+				<td>
+					<select id="CatagoryID" name="CatagoryID">
+						<?php if(is_array($ExistCatagories)): $i = 0; $__LIST__ = $ExistCatagories;if( count($__LIST__)==0 ) : echo "" ;else: foreach($__LIST__ as $key=>$vo): $mod = ($i % 2 );++$i;?><option value="<?php echo ($vo["ID"]); ?>"><?php echo ($vo["DisplayName"]); ?></option><?php endforeach; endif; else: echo "" ;endif; ?>
+					</select>
+				</td>
 			</tr>
 			<tr>
 				<td><label for="ImageFile">物品图片</label></td>
-				<td><input id="ImageFile" name="ImageFile" type="file" /></td>
+				<td><input id="ImageFile" name="ImageFile" type="file" onchange="HiddenUploadImage(this);" /></td>
+			</tr>
+			<tr>
+				<td><label for="ImagePath">物品预览</label></td>
+				<td>
+					<img id="ImagePreview" style="width:1024; height:768;" />
+					<input id="ImagePath" name="ImagePath" type="hidden" />
+				</td>
 			</tr>
 			<tr>
 				<td><label for="BackgroundColor">背景颜色</label></td>
@@ -146,16 +183,12 @@
 			</tr>
 			<tr>
 				<td><a href="<?php echo U('User/register');?>">注册</a></td>
-				<td><input id="submit" name="submit" type="submit" value="确认"><a href="#" onclick="autofill()">自动填充（仅限测试）</a></td>
+				<td><input id="submit" name="submit" type="submit" value="确认">
+					<?php if($IsAdmin): ?><a href="#" onclick="autofill()">自动填充（仅限测试）</a>
+		<iframe name="HiddenUploadImageFrame" style="width:400px; height:100px;" src="/">abc</iframe><?php endif; ?>
+				</td>
 			</tr>
 		</table>
-		
-		<script type="text/javascript" >
-		function autofill(){
-			$('#ItemName').val('物品名称');
-			$('#Description').val('物品描述');
-		};
-		</script>
 	</form>
 </div>
 

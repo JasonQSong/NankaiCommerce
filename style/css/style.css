@@ -440,7 +440,7 @@ body {
 }
 #sidebar {
 	width: 258px;
-	background: blueviolet url(../images/noize.png) repeat 100% 0;
+	background: #7f006b url(../images/noize.png) repeat 100% 0;
 	-webkit-box-shadow: inset 0px 0px 0px 1px rgba(255, 255, 255, 0.15);
 	-moz-box-shadow: inset 0px 0px 0px 1px rgba(255, 255, 255, 0.15);
 	box-shadow: inset 0px 0px 0px 1px rgba(255, 255, 255, 0.15);
@@ -619,7 +619,7 @@ body {
 	text-align: left;
 	padding: 0 15px 0 15px;
 	margin-left: 0;
-	background: #596d7f url(../images/noize.png) repeat top center;
+	background: #7f006b url(../images/noize.png) repeat top center;
 	-webkit-box-shadow: inset 0px 0px 0px 1px rgba(255, 255, 255, 0.10);
 	-moz-box-shadow: inset 0px 0px 0px 1px rgba(255, 255, 255, 0.10);
 	box-shadow: inset 0px 0px 0px 1px rgba(255, 255, 255, 0.10);

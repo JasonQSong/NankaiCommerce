@@ -51,40 +51,31 @@
 				<!-- Begin Menu -->
 				<div id="menu" class="menu-v">
 					<ul>
-						<li><a href="index.html" class="active">Home</a>
-							<ul>
-								<li><a href="index.html">Home w/ Carousel</a></li>
-								<li><a href="index2.html">Home w/ Portfolio</a></li>
-								<li><a href="index3.html">Home w/ Testimonials</a></li>
-							</ul>
-						</li>
-						<li><a href="portfolio.html">Portfolio</a>
-							<ul>
-								<li><a href="portfolio.html">Portfolio 4 Columns</a></li>
-								<li><a href="portfolio2.html">Portfolio 3 Columns</a></li>
-								<li><a href="portfolio3.html">Portfolio 2 Columns</a></li>
-								<li><a href="portfolio4.html">Portfolio 1 Column</a></li>
-								<li><a href="portfolio-post.html">Portfolio Post</a></li>
-							</ul>
-						</li>
-						<li><a href="blog.html">Blog</a>
-							<ul>
-								<li><a href="blog.html">Blog</a></li>
-								<li><a href="blog2.html">Blog w/ Sidebar</a></li>
-								<li><a href="post.html">Post</a></li>
-								<li><a href="post2.html">Post w/ Sidebar</a></li>
-							</ul>
-						</li>
-						<li><a href="buttons-boxes-images.html">Features</a>
-							<ul>
-								<li><a href="buttons-boxes-images.html">Buttons Boxes Images</a></li>
-								<li><a href="tabs-toggle-table.html">Tabs Toggle Tables</a></li>
-								<li><a href="testimonials.html">Testimonials</a></li>
-								<li><a href="typography.html">Typography</a></li>
-								<li><a href="service-icons.html">Service Icons</a></li>
-							</ul>
-						</li>
-						<li><a href="contact.html">Contact Us</a></li>
+						<?php if(is_array($HierarchyCatagories)): $i = 0; $__LIST__ = $HierarchyCatagories;if( count($__LIST__)==0 ) : echo "" ;else: foreach($__LIST__ as $key=>$vo0): $mod = ($i % 2 );++$i;?><li>
+								<a href="<?php echo U('Buy/viewcatagory','catagoryid='.$vo0['ID']);?>"><?php echo ($vo0["DisplayName"]); ?></a>
+								<?php if($vo0['Children']): ?><ul>
+										<?php if(is_array($vo0['Children'])): $i = 0; $__LIST__ = $vo0['Children'];if( count($__LIST__)==0 ) : echo "" ;else: foreach($__LIST__ as $key=>$vo1): $mod = ($i % 2 );++$i;?><li>
+												<a href="<?php echo U('Buy/viewcatagory','catagoryid='.$vo1['ID']);?>"><?php echo ($vo1["DisplayName"]); ?></a>
+											</li><?php endforeach; endif; else: echo "" ;endif; ?>
+									</ul><?php endif; ?>
+							</li><?php endforeach; endif; else: echo "" ;endif; ?>
+					</ul>
+				</div>
+				<!-- End Menu -->
+				<!-- Begin Menu -->
+				<div id="menu" class="menu-v">
+					<ul>
+						<?php if(is_array($AncestorsCatagories)): $i = 0; $__LIST__ = $AncestorsCatagories;if( count($__LIST__)==0 ) : echo "" ;else: foreach($__LIST__ as $key=>$vo0): $mod = ($i % 2 );++$i;?><li>
+								<a href="<?php echo U('Buy/viewcatagory','catagoryid='.$vo0['ID']);?>"><?php echo ($vo0["DisplayName"]); ?></a>
+							</li><?php endforeach; endif; else: echo "" ;endif; ?>
+						<?php if(is_array($SubHierarchyCatagories)): $i = 0; $__LIST__ = $SubHierarchyCatagories;if( count($__LIST__)==0 ) : echo "" ;else: foreach($__LIST__ as $key=>$vo0): $mod = ($i % 2 );++$i;?><li>
+								<a href="<?php echo U('Buy/viewcatagory','catagoryid='.$vo0['ID']);?>">|-<?php echo ($vo0["DisplayName"]); ?></a>
+								<?php if($vo0['Children']): ?><ul>
+										<?php if(is_array($vo0['Children'])): $i = 0; $__LIST__ = $vo0['Children'];if( count($__LIST__)==0 ) : echo "" ;else: foreach($__LIST__ as $key=>$vo1): $mod = ($i % 2 );++$i;?><li>
+												<a href="<?php echo U('Buy/viewcatagory','catagoryid='.$vo1['ID']);?>"><?php echo ($vo1["DisplayName"]); ?></a>
+											</li><?php endforeach; endif; else: echo "" ;endif; ?>
+									</ul><?php endif; ?>
+							</li><?php endforeach; endif; else: echo "" ;endif; ?>
 					</ul>
 				</div>
 				<!-- End Menu -->
@@ -98,6 +89,7 @@
 					<li><a href="#"><img src="style/images/icon-dribbble.png" alt="Dribbble" /></a></li>
 					<li><a href="#"><img src="style/images/icon-linkedin.png" alt="LinkedIn" /></a></li>
 				</ul>
+				<img src="Images/university.png"/>
 			</div>
 		</div>
 		<!-- End Sidebar --> 

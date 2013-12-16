@@ -1,5 +1,4 @@
 <?php
-// 本类由系统自动生成，仅供测试用途
 class UserAction extends Action {
     public function register(){
 		if(session('UserID')!=''){
@@ -7,8 +6,7 @@ class UserAction extends Action {
 			return;
 		}
 		$this->display();
-    }
-	
+    }	
     public function registerpost(){
 		$data['UserName']=I('post.UserName');
 		$data['Passwd']=sha1(I('post.Passwd'));
@@ -77,7 +75,6 @@ class UserAction extends Action {
 		}
 		$this->display();
 	}
-	
 	public function _info(){
 		$this->IsLogin=session('UserID')!=null;
 		if($this->IsLogin){
