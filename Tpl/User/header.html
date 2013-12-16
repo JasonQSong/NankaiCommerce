@@ -4,11 +4,11 @@
 		<if condition="$IsAdmin">
 			<span><a href="{:U('Admin/index')}">管理</a></span>
 		</if>
+		<span><a href="{:U('Buy/additem')}">求购</a></span>
 		<span><a href="{:U('Sell/index')}">卖东西</a></span>
 		<span><a href="{:U('User/profile')}">个人资料</a></span>
 		<span><a href="{:U('User/logout')}">登出</a></span>
 	<else/>
-		<span><a href="{:U('Sell/index')}">卖东西</a></span>
 		<span><a href="{:U('User/login')}">登录</a></span>
 		<span><a href="{:U('User/register')}">注册</a></span>
 	</if>

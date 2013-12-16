@@ -6,63 +6,35 @@ class BuyAction extends Action {
         $this->display();
 	}
 	public function viewcatagory($catagoryid){
+		$Items=M('Items');
+		$ItemsRecord=$Items->where('CatagoryID='.$catagoryid)->select();
+		if($ItemsRecord==null)
+			$ItemsRecord=array();
+		$ScionsCatagory=R('Sell/_scionscatagory',array($catagoryid));
+		if($ScionsCatagory!=null){
+			foreach($ScionsCatagory as $key => $CatagoryRecord){
+				$CatagoryItemsRecord=$Items->where('CatagoryID='.$ScionsCatagory[$key]['ID'])->select();
+				if($CatagoryItemsRecord!=null)
+					$ItemsRecord=array_merge($ItemsRecord,$CatagoryItemsRecord);
+			}
+		}
+		print_r($ItemsRecord);
 		R('Public/_base');
+		$this->CatagoryItems=$ItemsRecord;
 		$this->AncestorsCatagories=R('Sell/_ancestorscatagory',array($catagoryid));
 		$this->SubHierarchyCatagories=R('Sell/_hierachycatagory',array($catagoryid));
         $this->display();
 	}
-	public function additem(){
-		R('Public/_base');
-        $this->display();
-	}
-	public function additempost(){
-		$data['ItemName']=I('post.ItemName');
-		$data['Description']=sha1(I('post.Description'));
-		$data['Catagory']=I('post.Catagory');
-		$data['ImageFile']=I('post.ImageFile');
-		$data['BackgroundColor']=I('post.BackgroundColor');
-	}
-	
-	public function addcatagory(){		
-		if(!R('Admin/_confirmadmin')){
-			$this->error('没有权限');
-			return;
-		}
-		$Catagories=M('Catagories');
-		$CatagoriesRecord=$Catagories->where('1')->select();
-		R('Public/_base');
-		$this->ExistCatagories=$CatagoriesRecord;
-		print_r( $this->ExistCatagories);
-        $this->display();
-	}
-	public function addcatagorypost(){	
-		if(!R('Admin/_confirmadmin')){
-			$this->error('没有权限');
-			return;
-		}
-		$data['CatagoryName']=I('post.CatagoryName');
-		$data['DisplayName']=I('post.DisplayName');
-		$data['BelongTo']=I('post.BelongTo');
-		$data['AdminUserID']=session('UserID');		
-		$Catagories=M('Catagories');
-		$CatagoryRecord=$Catagories->where('CatagoryName='.$data['CatagoryName'])->find();
-        if($CatagoryRecord!=null) {
-			$this->error('类别名已存在！');
-			return;
-		}
-		$result = $Catagories->add($data);
-		if(!$result) {
-			$this->error('写入错误！');
-		}
-		$this->success('类别创建成功！',U('Index/index'));
-	}
-	public function _hierachycatagory($catagoryid){
-		$Catagories=M('Catagories');
-		$CatagoriesRecord=$Catagories->where('BelongTo='.$catagoryid)->select();
-        foreach($CatagoriesRecord as $key => $CatagoryRecord){
-			$CatagoriesRecord[$key]['Children']=$this->_hierachycatagory($CatagoryRecord['ID']);
-		}
-		return $CatagoriesRecord;
+	public function ajaxviewitem($itemid){
+		$Items=M('Items');
+		$ItemInfo=$Items->where('ID='.$itemid)->find();
+		$Actions=M('Actions');
+		$SellActionRecord=$Actions->where('ItemID='.$itemid.' and Act=sell')->select();
+		$BuyActionRecord=$Actions->where('ItemID='.$itemid.' and Act=buy')->select();
+		$data['iteminfo'] = $ItemInfo;
+		$data['sellers'] = $SellActionRecord;
+		$data['buyers'] = $BuyActionRecord;
+		$this->ajaxReturn($data,'JSON');
 	}
 }
 ?>

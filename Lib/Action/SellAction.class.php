@@ -22,16 +22,58 @@ class SellAction extends Action {
 			return;
 		}
 		$data['ItemName']=I('post.ItemName');
+		$data['Price']=I('post.Price');
 		$data['Description']=sha1(I('post.Description'));
-		$data['CatagoryID']=I('post.CatagoryID');
 		$data['ImagePath']=I('post.ImagePath');
 		$data['BackgroundColor']=I('post.BackgroundColor');
-		$data['SellerID']=session('UserID');
+		$data['CatagoryID']=I('post.CatagoryID');
+		$Items=M('Items');
+		$result = $Items->add($data);
+		if(!$result) {
+			$this->waitSecond=20;
+			$this->error('写入错误！');
+			return;
+		}
+		$data['Act']='sell';
+		$data['ItemID']=$result;
+		$data['UserID']=session('UserID');
+		$Actions=M('Actions');
+		$result = $Actions->add($data);
+		if(!$result) {
+			$this->error('写入错误！');
+			return;
+		}
+		$this->success('添加物品成功',U('Index/index'));
 	}
 	public function hiddenuploadimage(){
-		print_r($_FILES['ImageFile']);
-		$tmpImagePath=$_FILES['ImageFile']['tmp_name'];
-		$this->ImagePath=$tmpImagePath;
+		if(session('UserID')==''){
+			$this->UploadException='尚未登陆';
+			$this->display();			
+			return;
+		}
+		import('ORG.Net.UploadFile');
+		$upload = new UploadFile();// 实例化上传类
+		$upload->maxSize = 3145728 ;// 设置附件上传大小
+		$upload->allowExts = array('jpg', 'gif', 'png', 'jpeg');// 设置附件上传类型
+		$upload->savePath = './Images/Items/';// 设置附件上传目录
+		$upload->autoSub = true;// 是否使用子目录保存上传文件 
+		$upload->subType = 'date';// 子目录创建方式，默认为hash，可以设置为hash或者date
+		if(!$upload->upload()) {// 上传错误提示错误信息
+			$this->UploadException=$upload->getErrorMsg();
+			$this->display();			
+			return;
+		}
+		$info = $upload->getUploadFileInfo();// 上传成功 获取上传文件信息
+		$LogImages=M('LogImages');
+		$data['UserID']=session('UserID');
+		$data['ImagePath']=$info[0]['savename'];
+		$result = $LogImages->add($data);
+		if(!$result) {
+			$this->UploadException='Log写入错误';
+			$this->display();			
+			return;
+		}
+		$this->ImagePath=$info[0]['savename'];
 		$this->display();
 	}
 	public function addcatagory(){		
@@ -90,7 +132,9 @@ class SellAction extends Action {
 		$CatagoriesRecord=$Catagories->where('BelongTo='.$catagoryid)->select();
 		if($CatagoriesRecord!=null){
 			foreach($CatagoriesRecord as $key => $CatagoryRecord){
-				$CatagoriesRecord=array_merge($CatagoriesRecord,$this->_scionscatagory($CatagoryRecord['ID']));
+				$SubCatagoriesRecord=$this->_scionscatagory($CatagoryRecord['ID']);
+				if($SubCatagoriesRecord!=null)
+					$CatagoriesRecord=array_merge($CatagoriesRecord,$SubCatagoriesRecord);
 			}
 		}
 		return $CatagoriesRecord;

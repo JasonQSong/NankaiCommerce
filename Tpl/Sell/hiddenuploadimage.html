@@ -1,3 +1,8 @@
 <script type="text/javascript" language="javascript">
-	parent.HiddenUploadImage_callback("{$ImagePath}");
+<if condition="$UploadException eq ''">
+	alert("{$ImagePath}");
+	parent.HiddenUploadImage_callback(true,"{$ImagePath}");
+<else/>
+	parent.HiddenUploadImage_callback(false,{$UploadException});
+</if>
 </script>
