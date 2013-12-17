@@ -49,13 +49,15 @@ class UserAction extends Action {
 		$data['UserName']=I('post.UserName');
 		$data['Passwd']=sha1(I('post.Passwd'));
 		$Users=M('Users');
-		$UserRecord=$Users->where('UserName='.$data['UserName'])->find();
+		$UserRecord=$Users->where("UserName='".$data['UserName']."'")->find();
         if($UserRecord==null) {
+			$this->waitSecond=20;
             $this->error('用户名不存在');
 			return;
         }
 		$UserPasswd=$UserRecord['Passwd'];
 		if($data['Passwd']!=$UserPasswd) {
+			$this->waitSecond=20;
 			$this->error('密码错误！');
 			return;
 		}

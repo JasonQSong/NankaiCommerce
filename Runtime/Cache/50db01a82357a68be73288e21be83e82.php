@@ -26,47 +26,12 @@
 	<script type="text/javascript" src="style/js/jquery.masonry.min.js"></script>
 	<script type="text/javascript" src="style/js/jquery.slickforms.js"></script>
 	
-    <title>title index</title>
+	<title>Login</title>
 
 	
-	
-	<script type="text/javascript" >
-	var jsondata=null;
-	var fadeready=false;
-	function ShowItem(itemID){
-		$('#ItemInfo').fadeOut(200,function(){
-			fadeready=true;
-			ShowItemCallBack();
-		});
-		ajaxurl="<?php echo U('Buy/ajaxviewitem?itemid=-1');?>";
-		ajaxurl=ajaxurl.replace("-1",itemID);
-		$.ajax({
-			url:ajaxurl,
-			data:"",
-			success:function(tmpjsondata){
-				jsondata=tmpjsondata;
-				ShowItemCallBack();
-			}
-		});
-	}
-	function ShowItemCallBack(){
-		if(!fadeready)
-			return;
-		if(jsondata==null)
-			return;			
-		$('#ItemImage').attr('src','Images/Items/'+jsondata.iteminfo.ImagePath);
-		$('#ItemName').text(jsondata.iteminfo.ItemName);
-		$('#ItemPrice').text(jsondata.iteminfo.Price);
-		$('#SellerInfo').html(jsondata.SellerInfo);
-		$('#BuyerInfo').html(jsondata.BuyerInfo);
-		$('#body').css('background-image','');
-		$('#body').css('background-color',jsondata.iteminfo.BackGroundColor);
-		$('#ItemInfo').fadeIn();	
-		fadeready=false;			
-		jsondata=null;
-	}
-	</script>
+	<link rel="stylesheet" type="text/css" href="style/css/style2.css" media="all" />
 
+	
 </head>
 
 <body id="body">
@@ -149,33 +114,14 @@
 		
 			
 			
-	<div class="carousel">
-		<div id="carousel-scroll"><a href="#" id="prev"></a><a href="#" id="next"></a></div>
-		<ul>
-			<?php if(is_array($CatagoryItems)): $i = 0; $__LIST__ = $CatagoryItems;if( count($__LIST__)==0 ) : echo "" ;else: foreach($__LIST__ as $key=>$vo): $mod = ($i % 2 );++$i;?><li>
-					<a href="#" onclick="ShowItem(<?php echo ($vo["ID"]); ?>)">
-						<span class="overlay details"></span>
-						<img src="Images/Items/<?php echo ($vo["ImagePath"]); ?>" alt="<?php echo ($vo["ItemName"]); ?>" />
-					</a>
-				</li><?php endforeach; endif; else: echo "" ;endif; ?>
-		</ul>
-	</div>
-	<div id="ItemInfo">
-		<div class="center" >
-			<img id="ItemImage" class="center" src="Images/Items/default.png" style="width:1024px"/>
-		</div>
-		<div class="center">
-			<h1><span id="ItemName"></span></h1>
-			<h2><span id="ItemPrice" style="color:red"></span></h2>
-		</div>
-		<div class="center">
-			<p><span id="ItemDescription"></span></p>
-		</div>
-		<div class="center">
-			<p><span id="SellerInfo"></span></p>
-			<p><span id="BuyerInfo"></span></p>
-		</div>
-	</div>
+<div style="width:700px; margin:0 auto;"  >
+	<table border="1" cellspacing="2" cellpadding="2">
+		<tr>
+			<td><a href="<?php echo U('Admin/addcatagory');?>">添加类别</a></td>
+			<td><a href="<?php echo U('Admin/addcatagory');?>"></a></td>
+		</tr>
+	</table>
+</div>
 
 			
 			

@@ -26,44 +26,43 @@
 	<script type="text/javascript" src="style/js/jquery.masonry.min.js"></script>
 	<script type="text/javascript" src="style/js/jquery.slickforms.js"></script>
 	
-    <title>title index</title>
+	<title>Login</title>
 
 	
-	
+	<link rel="stylesheet" type="text/css" href="style/css/style2.css" media="all" />
+
+			
+	<?php if($IsAdmin): ?><script type="text/javascript" >
+		function autofill(){
+			$('#ItemName').val('物品名称');
+			$('#Price').val('100');
+			$('#Description').val('物品描述');
+			$('#BackgroundColor').val('#0080ff');
+		};
+		</script><?php endif; ?>
 	<script type="text/javascript" >
-	var jsondata=null;
-	var fadeready=false;
-	function ShowItem(itemID){
-		$('#ItemInfo').fadeOut(200,function(){
-			fadeready=true;
-			ShowItemCallBack();
-		});
-		ajaxurl="<?php echo U('Buy/ajaxviewitem?itemid=-1');?>";
-		ajaxurl=ajaxurl.replace("-1",itemID);
-		$.ajax({
-			url:ajaxurl,
-			data:"",
-			success:function(tmpjsondata){
-				jsondata=tmpjsondata;
-				ShowItemCallBack();
-			}
-		});
+	var fileForm = new Object();
+	function HiddenUploadImage(fileObj) {
+		if(fileObj.value != "") {
+			var form = document.forms['AddItemForm'];
+			//把form的原始数据缓存起来
+			fileForm.f = form;
+			fileForm.a = form.getAttribute("action");  //form.action 为一个静态的对象，所以这里要使用getAttribute方法取值
+			fileForm.t = form.target;
+			//请求服务器端
+			form.target = "HiddenUploadImageFrame";
+			form.action = "<?php echo U('Sell/hiddenuploadimage');?>";
+			form.submit();
+		//还原form属性
+		fileForm.f.target = fileForm.t;
+		fileForm.f.setAttribute("action", fileForm.a);
+		}
 	}
-	function ShowItemCallBack(){
-		if(!fadeready)
-			return;
-		if(jsondata==null)
-			return;			
-		$('#ItemImage').attr('src','Images/Items/'+jsondata.iteminfo.ImagePath);
-		$('#ItemName').text(jsondata.iteminfo.ItemName);
-		$('#ItemPrice').text(jsondata.iteminfo.Price);
-		$('#SellerInfo').html(jsondata.SellerInfo);
-		$('#BuyerInfo').html(jsondata.BuyerInfo);
-		$('#body').css('background-image','');
-		$('#body').css('background-color',jsondata.iteminfo.BackGroundColor);
-		$('#ItemInfo').fadeIn();	
-		fadeready=false;			
-		jsondata=null;
+	function HiddenUploadImage_callback(success,ImagePath){
+		//处理结果
+		$('#ImagePath').val(ImagePath);
+		$('#ImagePreview').attr('src','Images/Items/'+ImagePath);
+		return ;
 	}
 	</script>
 
@@ -149,33 +148,57 @@
 		
 			
 			
-	<div class="carousel">
-		<div id="carousel-scroll"><a href="#" id="prev"></a><a href="#" id="next"></a></div>
-		<ul>
-			<?php if(is_array($CatagoryItems)): $i = 0; $__LIST__ = $CatagoryItems;if( count($__LIST__)==0 ) : echo "" ;else: foreach($__LIST__ as $key=>$vo): $mod = ($i % 2 );++$i;?><li>
-					<a href="#" onclick="ShowItem(<?php echo ($vo["ID"]); ?>)">
-						<span class="overlay details"></span>
-						<img src="Images/Items/<?php echo ($vo["ImagePath"]); ?>" alt="<?php echo ($vo["ItemName"]); ?>" />
-					</a>
-				</li><?php endforeach; endif; else: echo "" ;endif; ?>
-		</ul>
-	</div>
-	<div id="ItemInfo">
-		<div class="center" >
-			<img id="ItemImage" class="center" src="Images/Items/default.png" style="width:1024px"/>
-		</div>
-		<div class="center">
-			<h1><span id="ItemName"></span></h1>
-			<h2><span id="ItemPrice" style="color:red"></span></h2>
-		</div>
-		<div class="center">
-			<p><span id="ItemDescription"></span></p>
-		</div>
-		<div class="center">
-			<p><span id="SellerInfo"></span></p>
-			<p><span id="BuyerInfo"></span></p>
-		</div>
-	</div>
+<div style="width:700px; margin:0 auto;"  >
+<h1>发布购买信息</h1>
+	<form name="AddItemForm" action="<?php echo U('Buy/additempost');?>" method="post" onsubmit="" enctype="multipart/form-data">
+		<table border="1" cellspacing="2" cellpadding="2">
+			<tr>
+				<td><label for="ItemName">物品名称</label></td>
+				<td><input id="ItemName" name="ItemName" type="text" maxlength="20"></td>
+			</tr>
+			<tr>
+				<td><label for="Price">价格</label></td>
+				<td><input id="Price" name="Price" type="text" maxlength="20"></td>
+			</tr>
+			<tr>
+				<td><label for="Description">描述</label></td>
+				<td><input id="Description" name="Description" type="text" maxlength="20"></td>
+			</tr>
+			<tr>
+				<td><label for="CatagoryID">分类</label></td>
+				<td>
+					<select id="CatagoryID" name="CatagoryID">
+						<?php if(is_array($ExistCatagories)): $i = 0; $__LIST__ = $ExistCatagories;if( count($__LIST__)==0 ) : echo "" ;else: foreach($__LIST__ as $key=>$vo): $mod = ($i % 2 );++$i;?><option value="<?php echo ($vo["ID"]); ?>"><?php echo ($vo["DisplayName"]); ?></option><?php endforeach; endif; else: echo "" ;endif; ?>
+					</select>
+				</td>
+			</tr>
+			<tr>
+				<td><label for="ImageFile">图片上传</label></td>
+				<td>
+					<input id="ImageFile" name="ImageFile" type="file" onchange="HiddenUploadImage(this);" />
+				</td>
+			</tr>
+			<tr>
+				<td><label for="ImagePath">图片预览</label></td>
+				<td>
+					<img id="ImagePreview" style="width:400px;" src="Images/Items/default.png" />
+					<input id="ImagePath" name="ImagePath" type="hidden" value="default.png" />
+				</td>
+			</tr>
+			<tr>
+				<td><label for="BackgroundColor">背景颜色</label></td>
+				<td><input id="BackgroundColor" name="BackgroundColor" type="color"></td>
+			</tr>
+			<tr>
+				<td><a href="<?php echo U('User/register');?>">注册</a></td>
+				<td><input type="submit" value="确认">
+					<?php if($IsAdmin): ?><a href="#" onclick="autofill()">自动填充（仅限测试）</a><?php endif; ?>
+				</td>
+			</tr>
+		</table>
+		<iframe name="HiddenUploadImageFrame"></iframe>
+	</form>
+</div>
 
 			
 			

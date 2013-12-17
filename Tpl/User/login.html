@@ -8,14 +8,12 @@
 </block>
 
 <block name="javascript">
-	<if condition="$IsAdmin">
-		<script type="text/javascript" >
+	<script type="text/javascript" >
 		function autofill(){
 			$('#UserName').val('UserName');
 			$('#Passwd').val('Passwd');
 		};
-		</script>
-	</if>
+	</script>
 </block>
 
 <block name="main">
@@ -34,7 +32,7 @@
 				<td><a href="{:U('User/register')}">注册</a></td>
 				<td>
 					<input id="submit" name="submit" type="submit" value="确认">
-					<if condition="$IsAdmin"><a href="#" onclick="autofill()">自动填充（仅限测试）</a></if>
+					<a href="#" onclick="autofill()">自动填充（仅限测试）</a>
 				</td>
 			</tr>
 		</table>

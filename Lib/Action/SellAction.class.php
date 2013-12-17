@@ -23,7 +23,7 @@ class SellAction extends Action {
 		}
 		$data['ItemName']=I('post.ItemName');
 		$data['Price']=I('post.Price');
-		$data['Description']=sha1(I('post.Description'));
+		$data['Description']=I('post.Description');
 		$data['ImagePath']=I('post.ImagePath');
 		$data['BackgroundColor']=I('post.BackgroundColor');
 		$data['CatagoryID']=I('post.CatagoryID');

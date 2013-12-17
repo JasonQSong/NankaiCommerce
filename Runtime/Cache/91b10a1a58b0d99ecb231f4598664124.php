@@ -26,46 +26,18 @@
 	<script type="text/javascript" src="style/js/jquery.masonry.min.js"></script>
 	<script type="text/javascript" src="style/js/jquery.slickforms.js"></script>
 	
-    <title>title index</title>
+	<title>Login</title>
 
 	
+	<link rel="stylesheet" type="text/css" href="../Admin/style/css/style2.css" media="all" />
+
 	
-	<script type="text/javascript" >
-	var jsondata=null;
-	var fadeready=false;
-	function ShowItem(itemID){
-		$('#ItemInfo').fadeOut(200,function(){
-			fadeready=true;
-			ShowItemCallBack();
-		});
-		ajaxurl="<?php echo U('Buy/ajaxviewitem?itemid=-1');?>";
-		ajaxurl=ajaxurl.replace("-1",itemID);
-		$.ajax({
-			url:ajaxurl,
-			data:"",
-			success:function(tmpjsondata){
-				jsondata=tmpjsondata;
-				ShowItemCallBack();
-			}
-		});
-	}
-	function ShowItemCallBack(){
-		if(!fadeready)
-			return;
-		if(jsondata==null)
-			return;			
-		$('#ItemImage').attr('src','Images/Items/'+jsondata.iteminfo.ImagePath);
-		$('#ItemName').text(jsondata.iteminfo.ItemName);
-		$('#ItemPrice').text(jsondata.iteminfo.Price);
-		$('#SellerInfo').html(jsondata.SellerInfo);
-		$('#BuyerInfo').html(jsondata.BuyerInfo);
-		$('#body').css('background-image','');
-		$('#body').css('background-color',jsondata.iteminfo.BackGroundColor);
-		$('#ItemInfo').fadeIn();	
-		fadeready=false;			
-		jsondata=null;
-	}
-	</script>
+	<?php if($IsAdmin): ?><script type="text/javascript" >
+		function autofill(){
+			$('#CatagoryName').val('CatagoryName');
+			$('#DisplayName').val('类别名');
+		};
+		</script><?php endif; ?>
 
 </head>
 
@@ -149,33 +121,35 @@
 		
 			
 			
-	<div class="carousel">
-		<div id="carousel-scroll"><a href="#" id="prev"></a><a href="#" id="next"></a></div>
-		<ul>
-			<?php if(is_array($CatagoryItems)): $i = 0; $__LIST__ = $CatagoryItems;if( count($__LIST__)==0 ) : echo "" ;else: foreach($__LIST__ as $key=>$vo): $mod = ($i % 2 );++$i;?><li>
-					<a href="#" onclick="ShowItem(<?php echo ($vo["ID"]); ?>)">
-						<span class="overlay details"></span>
-						<img src="Images/Items/<?php echo ($vo["ImagePath"]); ?>" alt="<?php echo ($vo["ItemName"]); ?>" />
-					</a>
-				</li><?php endforeach; endif; else: echo "" ;endif; ?>
-		</ul>
-	</div>
-	<div id="ItemInfo">
-		<div class="center" >
-			<img id="ItemImage" class="center" src="Images/Items/default.png" style="width:1024px"/>
-		</div>
-		<div class="center">
-			<h1><span id="ItemName"></span></h1>
-			<h2><span id="ItemPrice" style="color:red"></span></h2>
-		</div>
-		<div class="center">
-			<p><span id="ItemDescription"></span></p>
-		</div>
-		<div class="center">
-			<p><span id="SellerInfo"></span></p>
-			<p><span id="BuyerInfo"></span></p>
-		</div>
-	</div>
+<div style="width:700px; margin:0 auto;"  >
+	<form action="<?php echo U('Sell/addcatagorypost');?>" method="post">
+		<table border="1" cellspacing="2" cellpadding="2">
+			<tr>
+				<td><label for="CatagoryName">类别名（字段）</label></td>
+				<td><input id="CatagoryName" name="CatagoryName" type="text" maxlength="20"></td>
+			</tr>
+			<tr>
+				<td><label for="DisplayName">类别名（显示）</label></td>
+				<td><input id="DisplayName" name="DisplayName" type="text" maxlength="20"></td>
+			</tr>
+			<tr>
+				<td><label for="BelongTo">父分类</label></td>
+				<td>
+					<select id="BelongTo" name="BelongTo">
+						<option value="0">None</option>
+						<?php if(is_array($ExistCatagories)): $i = 0; $__LIST__ = $ExistCatagories;if( count($__LIST__)==0 ) : echo "" ;else: foreach($__LIST__ as $key=>$vo): $mod = ($i % 2 );++$i;?><option value="<?php echo ($vo["ID"]); ?>"><?php echo ($vo["DisplayName"]); ?></option><?php endforeach; endif; else: echo "" ;endif; ?>
+					</select>
+				</td>
+			</tr>
+			<tr>
+				<td><a href="<?php echo U('User/register');?>"></a></td>
+				<td><input id="submit" name="submit" type="submit" value="确认">
+					<?php if($IsAdmin): ?><a href="#" onclick="autofill()">自动填充（仅限测试）</a><?php endif; ?>
+				</td>
+			</tr>
+		</table>
+	</form>
+</div>
 
 			
 			

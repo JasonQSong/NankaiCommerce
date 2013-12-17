@@ -6,15 +6,39 @@
 
 <block name="javascript">
 	<script type="text/javascript" >
+	var jsondata=null;
+	var fadeready=false;
 	function ShowItem(itemID){
-		alert(itemID);
-		ajaxurl={:U('Buy/ajaxviewitem')}+'/itemid/'+itemID;
-		$.getJSON({ url: ajaxurl ,
-			success: funtion(result){
-				alert(result);
+		$('#ItemInfo').fadeOut(200,function(){
+			fadeready=true;
+			ShowItemCallBack();
+		});
+		ajaxurl="{:U('Buy/ajaxviewitem?itemid=-1')}";
+		ajaxurl=ajaxurl.replace("-1",itemID);
+		$.ajax({
+			url:ajaxurl,
+			data:"",
+			success:function(tmpjsondata){
+				jsondata=tmpjsondata;
+				ShowItemCallBack();
 			}
 		});
-	
+	}
+	function ShowItemCallBack(){
+		if(!fadeready)
+			return;
+		if(jsondata==null)
+			return;			
+		$('#ItemImage').attr('src','Images/Items/'+jsondata.iteminfo.ImagePath);
+		$('#ItemName').text(jsondata.iteminfo.ItemName);
+		$('#ItemPrice').text(jsondata.iteminfo.Price);
+		$('#SellerInfo').html(jsondata.SellerInfo);
+		$('#BuyerInfo').html(jsondata.BuyerInfo);
+		$('#body').css('background-image','');
+		$('#body').css('background-color',jsondata.iteminfo.BackGroundColor);
+		$('#ItemInfo').fadeIn();	
+		fadeready=false;			
+		jsondata=null;
 	}
 	</script>
 </block>
@@ -27,7 +51,7 @@
 				<li>
 					<a href="#" onclick="ShowItem({$vo.ID})">
 						<span class="overlay details"></span>
-						<img onclick="ShowItem({$vo.ID})" src="Images/Items/{$vo.ImagePath}" alt="{$vo.ItemName}" />
+						<img src="Images/Items/{$vo.ImagePath}" alt="{$vo.ItemName}" />
 					</a>
 				</li>
 			</volist>
@@ -38,10 +62,15 @@
 			<img id="ItemImage" class="center" src="Images/Items/default.png" style="width:1024px"/>
 		</div>
 		<div class="center">
-			<span id="ItemName"></span>
+			<h1><span id="ItemName"></span></h1>
+			<h2><span id="ItemPrice" style="color:red"></span></h2>
 		</div>
 		<div class="center">
-			<span id="ItemDescription"></span>
+			<p><span id="ItemDescription"></span></p>
+		</div>
+		<div class="center">
+			<p><span id="SellerInfo"></span></p>
+			<p><span id="BuyerInfo"></span></p>
 		</div>
 	</div>
 </block>

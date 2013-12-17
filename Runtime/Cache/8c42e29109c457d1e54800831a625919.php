@@ -32,10 +32,11 @@
 	
 </head>
 
-<body>
+<body id="body">
 	
 	<!-- Begin Wrapper -->
 	<div id="wrapper"> 
+		<div id="mask"></div>
 		
 		
 		
